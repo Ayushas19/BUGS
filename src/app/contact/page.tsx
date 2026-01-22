@@ -12,7 +12,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email Us',
-    value: 'hello@cachebugs.com',
+    value: 'contact@cachebugs.site',
     subtitle: 'We reply within 24 hours',
   },
   {
@@ -24,7 +24,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Location',
-    value: 'San Francisco, CA',
+    value: 'KANPUR, UTTAR PRADESH, INDIA',
     subtitle: 'Innovation District',
   },
   {
