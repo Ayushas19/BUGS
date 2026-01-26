@@ -40,7 +40,7 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Github, href: '#', label: 'GitHub', color: 'hover:text-white' },
-  { icon: Twitter, href: 'https://www.jotform.com/agent/019bfac3b0dc7399a769dcfd5aee9051742b', label: 'Twitter', color: 'hover:text-cyan-400' },
+  { icon: MessageCircle, href: 'https://www.jotform.com/agent/019bfac3b0dc7399a769dcfd5aee9051742b', label: 'Chat', color: 'hover:text-cyan-400' },
   { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-400' },
   { icon: MessageCircle, href: '#', label: 'Discord', color: 'hover:text-purple-400' },
 ];

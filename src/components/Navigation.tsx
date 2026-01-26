@@ -18,7 +18,7 @@ const navItems = [
 
 const socialLinks = [
   { icon: Github, href: '#', label: 'GitHub' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
+  { icon: MessageCircle, href: 'https://www.jotform.com/agent/019bfac3b0dc7399a769dcfd5aee9051742b', label: 'Chat' },
   { icon: Linkedin, href: '#', label: 'LinkedIn' },
   { icon: MessageCircle, href: '#', label: 'Discord' },
 ];
