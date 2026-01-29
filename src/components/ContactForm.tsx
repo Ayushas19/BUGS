@@ -35,7 +35,13 @@ const timelines = [
   '6+ months',
 ];
 
-export default function ContactForm() {
+// 1. Define the props interface
+interface ContactFormProps {
+  formEndpoint: string;
+}
+
+// 2. Accept the prop in the component
+export default function ContactForm({ formEndpoint }: ContactFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     projectType: '',
@@ -48,13 +54,12 @@ export default function ContactForm() {
   });
   
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state for loading status
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNext = () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Trigger submission when on the last step
       submitToFormspree();
     }
   };
@@ -65,12 +70,12 @@ export default function ContactForm() {
     }
   };
 
-  // Function to send data to Formspree via AJAX (No page reload)
   const submitToFormspree = async () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("https://formspree.io/f/mqepqlrg", {
+      // 3. Use the dynamic prop here
+      const response = await fetch(formEndpoint, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
