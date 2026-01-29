@@ -28,8 +28,8 @@ const timelines = [
 ];
 
 export default function ProjectEstimator() {
-  // --- Formspree Integration with your ID ---
-  const [state, handleSubmit] = useForm("https://formspree.io/f/xrekpayq"); 
+  // FIX 1: Use ONLY the ID, not the full URL
+  const [state, handleSubmit] = useForm("xrekpayq"); 
 
   const [projectType, setProjectType] = useState('');
   const [complexity, setComplexity] = useState('');
@@ -56,22 +56,6 @@ export default function ProjectEstimator() {
     const baseWeeks = projectType === 'web' ? 8 : projectType === 'mobile' ? 12 : projectType === 'ai' ? 10 : 6;
     const compMult = complexity === 'simple' ? 0.7 : complexity === 'moderate' ? 1 : complexity === 'complex' ? 1.5 : 2;
     return Math.round(baseWeeks * compMult);
-  };
-
-  // --- Custom Submission Handler ---
-  const handleFormSubmission = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // We send the email plus the calculated data as hidden fields
-    handleSubmit({
-      email: email,
-      projectType: projectTypes.find(t => t.id === projectType)?.label,
-      complexity: complexityLevels.find(c => c.id === complexity)?.label,
-      timeline: timelines.find(t => t.id === timeline)?.label,
-      selectedFeatures: features.join(', '),
-      estimatedCost: `$${totalCost.toLocaleString()}`,
-      estimatedDuration: `${estimatedWeeks()} weeks`
-    });
   };
 
   // --- Success State ---
@@ -134,6 +118,7 @@ export default function ProjectEstimator() {
                 <button
                   key={type.id}
                   onClick={() => setProjectType(type.id)}
+                  type="button" // Important: Prevent this from submitting the form
                   className={`p-4 rounded-xl border transition-all cursor-hover ${
                     projectType === type.id ? 'bg-white/10 border-cyan-500/50' : 'bg-white/5 border-white/10 hover:border-white/20'
                   }`}
@@ -154,6 +139,7 @@ export default function ProjectEstimator() {
                   <button
                     key={level.id}
                     onClick={() => setComplexity(level.id)}
+                    type="button" // Prevent submit
                     className={`p-4 rounded-xl border transition-all cursor-hover text-left ${
                       complexity === level.id ? 'bg-white/10 border-purple-500/50' : 'bg-white/5 border-white/10 hover:border-white/20'
                     }`}
@@ -175,6 +161,7 @@ export default function ProjectEstimator() {
                   <button
                     key={t.id}
                     onClick={() => setTimeline(t.id)}
+                    type="button" // Prevent submit
                     className={`p-4 rounded-xl border transition-all cursor-hover text-left ${
                       timeline === t.id ? 'bg-white/10 border-green-500/50' : 'bg-white/5 border-white/10 hover:border-white/20'
                     }`}
@@ -196,6 +183,7 @@ export default function ProjectEstimator() {
                   <button
                     key={feature}
                     onClick={() => features.includes(feature) ? setFeatures(features.filter(f => f !== feature)) : setFeatures([...features, feature])}
+                    type="button" // Prevent submit
                     className={`p-3 rounded-xl border transition-all cursor-hover text-left flex items-center gap-3 ${
                       features.includes(feature) ? 'bg-white/10 border-cyan-500/50' : 'bg-white/5 border-white/10 hover:border-white/20'
                     }`}
@@ -227,8 +215,17 @@ export default function ProjectEstimator() {
                 <p className="text-sm text-gray-500">Estimated timeline: {estimatedWeeks()} weeks</p>
               </div>
 
-              {/* Formspree Form */}
-              <form onSubmit={handleFormSubmission} className="max-w-md mx-auto">
+              {/* FIX 2: Form Structure with Hidden Inputs */}
+              <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+                
+                {/* These hidden inputs carry your custom React state to Formspree */}
+                <input type="hidden" name="project_type" value={projectTypes.find(t => t.id === projectType)?.label || ''} />
+                <input type="hidden" name="complexity" value={complexityLevels.find(c => c.id === complexity)?.label || ''} />
+                <input type="hidden" name="timeline" value={timelines.find(t => t.id === timeline)?.label || ''} />
+                <input type="hidden" name="features" value={features.join(', ') || 'None'} />
+                <input type="hidden" name="estimated_cost" value={`$${totalCost.toLocaleString()}`} />
+                <input type="hidden" name="estimated_duration" value={`${estimatedWeeks()} weeks`} />
+
                 <div className="flex flex-col sm:flex-row gap-3">
                   <input
                     id="email"
@@ -260,4 +257,3 @@ export default function ProjectEstimator() {
     </section>
   );
 }
-
