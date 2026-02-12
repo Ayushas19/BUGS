@@ -284,7 +284,7 @@ export default function Footer() {
                     type="text"
                     name="name"
                     required
-                    placeholder="Nikhil Yadav"
+                    placeholder="Your Full Name"
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-500/50 transition-colors"
                   />
                 </div>
