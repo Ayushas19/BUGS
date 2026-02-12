@@ -213,7 +213,18 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
-
+              <li>
+                <a href="mailto:contact@cachebugs.site"
+                  className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-cyan-500/30 transition-all cursor-hover group">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">Email Us</p>
+                    <p className="text-gray-400 text-xs group-hover:text-gray-300">contact@cachebugs.site</p>
+                  </div>
+                </a>
+              </li>
               {/* Popup Trigger Button */}
               <li className="pt-2">
                 <button
