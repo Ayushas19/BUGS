@@ -274,7 +274,7 @@ export default function Footer() {
               <p className="text-gray-400 mb-6">Leave your details and we'll reach out shortly.</p>
 
               <form 
-                action="https://formspree.io/f/YOUR_FORMSPREE_ID" 
+                action="https://formspree.io/f/xkovgrdg" 
                 method="POST"
                 className="space-y-4"
               >
