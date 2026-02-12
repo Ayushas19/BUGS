@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Github, Twitter, Linkedin, MessageCircle, 
-  Mail, MapPin, ArrowRight, Code, Zap, Heart, Phone
+  Mail, MapPin, ArrowRight, Code, Zap, Heart, Phone, X
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -48,12 +48,14 @@ const socialLinks = [
 const founderContacts = [
   { name: 'Nikhil Yadav', phone: '8355065408', role: 'Founder' },
   { name: 'Ayush Bajpai', phone: '6393403504', role: 'Co-Founder' },
+  { name: 'Ayush Mishra', phone: '6392116681', role: 'Tech-Lead' },
 ];
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -130,13 +132,12 @@ export default function Footer() {
               <p className="text-sm text-gray-500 mb-3">Subscribe to our tech insights</p>
               <form onSubmit={handleSubscribe} className="flex gap-2">
                 <div className="relative flex-1">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+                    className="w-full pl-4 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
                   />
                 </div>
                 <button
@@ -146,15 +147,6 @@ export default function Footer() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </form>
-              {subscribed && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-green-400 text-sm mt-2"
-                >
-                  Thanks for subscribing!
-                </motion.p>
-              )}
             </div>
 
             {/* Social Links */}
@@ -172,79 +164,39 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              Services
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors cursor-hover text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Column Links Mapping */}
+          {['services', 'company', 'resources'].map((section) => (
+            <div key={section}>
+              <h4 className="text-white font-semibold mb-4 capitalize flex items-center gap-2">
+                {section === 'services' && <Zap className="w-4 h-4 text-cyan-400" />}
+                {section === 'company' && <Code className="w-4 h-4 text-purple-400" />}
+                {section === 'resources' && <Heart className="w-4 h-4 text-pink-400" />}
+                {section}
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks[section as keyof typeof footerLinks].map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-400 hover:text-white transition-colors cursor-hover text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
-          {/* Company Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-              <Code className="w-4 h-4 text-purple-400" />
-              Company
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors cursor-hover text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-              <Heart className="w-4 h-4 text-pink-400" />
-              Resources
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors cursor-hover text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info with Founder Call Buttons */}
+          {/* Contact Info */}
           <div>
             <h4 className="text-white font-semibold mb-4">Get in Touch</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-gray-400">
                 <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">
-                 KANPUR<br />
-                 UTTAR PRADESH, INDIA
-                </span>
+                <span className="text-sm">KANPUR<br />UTTAR PRADESH, INDIA</span>
               </li>
               
-              {/* Founder Contact Buttons */}
               {founderContacts.map((founder) => (
                 <li key={founder.phone}>
                   <a
@@ -256,65 +208,107 @@ export default function Footer() {
                     </div>
                     <div>
                       <p className="text-white font-medium text-sm">{founder.name}</p>
-                      <p className="text-gray-400 text-xs">{founder.role}</p>
-                      <p className="text-cyan-400 text-xs group-hover:text-cyan-300">+91 {founder.phone}</p>
+                      <p className="text-cyan-400 text-xs">+91 {founder.phone}</p>
                     </div>
                   </a>
                 </li>
               ))}
 
-              <li>
-                <a
-                  href="mailto:contact@cachebugs.site"
-                  className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-cyan-500/30 transition-all cursor-hover group"
-                >
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
-                    <Mail className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-white font-medium text-sm">Email Us</p>
-                    <p className="text-gray-400 text-xs group-hover:text-gray-300">contact@cachebugs.site</p>
-                  </div>
-                </a>
-              </li>
-
+              {/* Popup Trigger Button */}
               <li className="pt-2">
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => setShowContactModal(true)}
                   className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl font-medium text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all cursor-hover group"
                 >
                   <span>Book a Call</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="relative mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} CACHEBUGS. All rights reserved.
-          </p>
+        <div className="relative mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
+          <p>© {new Date().getFullYear()} CACHEBUGS. All rights reserved.</p>
           <div className="flex items-center gap-6">
             {footerLinks.legal.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-gray-500 hover:text-gray-300 text-sm transition-colors cursor-hover"
-              >
+              <Link key={link.label} href={link.href} className="hover:text-gray-300 transition-colors">
                 {link.label}
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-2 text-gray-500 text-sm">
+          <div className="flex items-center gap-2">
             <span>Made with</span>
             <Heart className="w-4 h-4 text-pink-500 animate-pulse" />
             <span>by CACHEBUGS</span>
           </div>
         </div>
       </div>
+
+      {/* Formspree Popup Modal */}
+      <AnimatePresence>
+        {showContactModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowContactModal(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-2xl p-8 shadow-2xl"
+            >
+              <button 
+                onClick={() => setShowContactModal(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h3 className="text-2xl font-bold text-white mb-2">Book a Call</h3>
+              <p className="text-gray-400 mb-6">Leave your details and we'll reach out shortly.</p>
+
+              <form 
+                action="https://formspree.io/f/xkovgrdg" 
+                method="POST"
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Your Full Name"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-500/50 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Contact Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    placeholder="+91 00000 00000"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-500/50 transition-colors"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl font-bold text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all mt-4"
+                >
+                  Submit Details
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </footer>
   );
 }
-
